@@ -24,21 +24,23 @@
     var CONFIG = {"hostname":"coderfelixby.github.io","root":"/","scheme":"Pisces","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="Kotlin 中，还为我们提供了许多使数组与集合操作起来更加方便的函数,以下面的集合和数组为例说明。">
+  <meta name="description" content="一般自定义View可以分为3个部分，布局，绘制，触摸反馈。布局过程可以理解为对绘制和触摸反馈的支撑，是决定了绘制位置和触摸事件位置的关键点。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kotlin数组与集合的操作符">
-<meta property="og:url" content="http://coderfelixby.github.io/2020/09/01/Kotin/Kotin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/index.html">
+<meta property="og:title" content="布局绘制解析">
+<meta property="og:url" content="http://coderfelixby.github.io/2020/09/21/Android/%E5%B8%83%E5%B1%80%E7%BB%98%E5%88%B6%E8%A7%A3%E6%9E%90/index.html">
 <meta property="og:site_name" content="Felix&#39;s Blog">
-<meta property="og:description" content="Kotlin 中，还为我们提供了许多使数组与集合操作起来更加方便的函数,以下面的集合和数组为例说明。">
+<meta property="og:description" content="一般自定义View可以分为3个部分，布局，绘制，触摸反馈。布局过程可以理解为对绘制和触摸反馈的支撑，是决定了绘制位置和触摸事件位置的关键点。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-09-01T09:45:43.000Z">
-<meta property="article:modified_time" content="2020-09-01T09:45:43.000Z">
+<meta property="og:image" content="http://coderfelixby.github.io/2020/09/21/Android/%E5%B8%83%E5%B1%80%E7%BB%98%E5%88%B6%E8%A7%A3%E6%9E%90/media/16007596264312.jpg">
+<meta property="article:published_time" content="2020-09-21T07:59:14.000Z">
+<meta property="article:modified_time" content="2020-09-21T07:59:14.000Z">
 <meta property="article:author" content="Felix Qi">
-<meta property="article:tag" content="Kotlin">
+<meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://coderfelixby.github.io/2020/09/21/Android/%E5%B8%83%E5%B1%80%E7%BB%98%E5%88%B6%E8%A7%A3%E6%9E%90/media/16007596264312.jpg">
 
 
-<link rel="canonical" href="http://coderfelixby.github.io/2020/09/01/Kotin/Kotin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/">
+<link rel="canonical" href="http://coderfelixby.github.io/2020/09/21/Android/%E5%B8%83%E5%B1%80%E7%BB%98%E5%88%B6%E8%A7%A3%E6%9E%90/">
 
 
 <script class="page-configurations">
@@ -51,7 +53,7 @@
   };
 </script>
 
-  <title>Kotlin数组与集合的操作符 | Felix's Blog</title>
+  <title>布局绘制解析 | Felix's Blog</title>
   
 
 
@@ -211,7 +213,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#forEach%EF%BC%88%E9%81%8D%E5%8E%86%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">forEach（遍历）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#filter%EF%BC%88%E8%BF%87%E6%BB%A4%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">filter（过滤）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map-%E9%81%8D%E5%8E%86%E7%94%9F%E6%88%90%E6%96%B0%E7%9A%84%E9%9B%86%E5%90%88"><span class="nav-number">3.</span> <span class="nav-text">map(遍历生成新的集合)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flatmap%EF%BC%88%E6%95%B0%E7%BB%84%E9%99%8D%E7%BB%B4%E6%89%93%E5%B9%B3%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">flatmap（数组降维打平）</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#View%E5%B8%83%E5%B1%80%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">View布局绘制流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E4%B8%8A%E7%9C%8B"><span class="nav-number">1.1.</span> <span class="nav-text">整体上看</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AA%E4%BD%93%E4%B8%8A%E7%9C%8B%EF%BC%88%E4%BB%8EView%E7%9A%84%E8%A7%92%E5%BA%A6%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">个体上看（从View的角度）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%83%E5%B1%80%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">自定义布局的具体实现</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -276,7 +278,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://coderfelixby.github.io/2020/09/01/Kotin/Kotin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/">
+    <link itemprop="mainEntityOfPage" href="http://coderfelixby.github.io/2020/09/21/Android/%E5%B8%83%E5%B1%80%E7%BB%98%E5%88%B6%E8%A7%A3%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -292,7 +294,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Kotlin数组与集合的操作符
+          布局绘制解析
         </h1>
 
         <div class="post-meta-container">
@@ -303,7 +305,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-09-01 17:45:43" itemprop="dateCreated datePublished" datetime="2020-09-01T17:45:43+08:00">2020-09-01</time>
+      <time title="创建时间：2020-09-21 15:59:14" itemprop="dateCreated datePublished" datetime="2020-09-21T15:59:14+08:00">2020-09-21</time>
     </span>
 
   
@@ -314,7 +316,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>828</span>
+      <span>1.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -332,19 +334,31 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>Kotlin 中，还为我们提供了许多使数组与集合操作起来更加方便的函数,以下面的集合和数组为例说明。</p>
+        <p>一般自定义View可以分为3个部分，布局，绘制，触摸反馈。布局过程可以理解为对绘制和触摸反馈的支撑，是决定了绘制位置和触摸事件位置的关键点。</p>
 <a id="more"></a>
 
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intArray = intArrayOf(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="keyword">val</span> strList = listOf(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>)</span><br></pre></td></tr></table></figure>
-<h4 id="forEach（遍历）"><a href="#forEach（遍历）" class="headerlink" title="forEach（遍历）"></a>forEach（遍历）</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//              👇 lambda 表达式，i 表示数组的每个元素</span></span><br><span class="line">intArray.forEach &#123; i -&gt;</span><br><span class="line">    print(i + <span class="string">&quot; &quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 输出：1 2 3   </span></span><br></pre></td></tr></table></figure>
+<h4 id="View布局绘制流程"><a href="#View布局绘制流程" class="headerlink" title="View布局绘制流程"></a>View布局绘制流程</h4><h5 id="整体上看"><a href="#整体上看" class="headerlink" title="整体上看"></a>整体上看</h5><ul>
+<li>测量流程：<br>  从根View递归调用每一级子View的measure()方法，先对每个子View进行测量。然后父View根据子View的测量数据决定真实的大小和位置。</li>
+<li>绘制流程：<br>  从根View递归调用每一级子View的layout()方法，把测量完成后获得的子View的位置和尺寸传回给子View，子View保存。</li>
+</ul>
+<h5 id="个体上看（从View的角度）"><a href="#个体上看（从View的角度）" class="headerlink" title="个体上看（从View的角度）"></a>个体上看（从View的角度）</h5><p>1、父View根据开发者在xml中写的对子View的要求，和自己的可用空间，得出对子View的具体尺寸要求。<br>2、子View在自己的onMeasure()中，根据父View的要求以及自己的特性算出自己的期望尺寸。（以父View的要求作为更高优先级，因为父View的要求包含开发者的要求），如果是viewgroup还会调用每个子View的measure()进行测量。<br>3、父View在子View计算出期望尺寸后，得出子View的实际尺寸和位置。<br>4、子View在自己的layout方法中，将父View传递过来的实际尺寸和位置进行保存。</p>
+<h4 id="自定义布局的具体实现"><a href="#自定义布局的具体实现" class="headerlink" title="自定义布局的具体实现"></a>自定义布局的具体实现</h4><ul>
+<li><p>重写onMeasure()，改变布局的尺寸,或者对View完全进行自定义尺寸计算。<br>  具体步骤如下：</p>
+<ul>
+<li>用getMeasuredWidth（）和getMeasuredHeight()获取到测量出的尺寸。</li>
+<li>计算出最终要的尺寸</li>
+<li>用setMeasuredDimension(width,height)保存结果</li>
+</ul>
+</li>
+</ul>
+<p>eg:如果只修改layout将不会通知父布局，所以要重写onMeasure()<br><img src="media/16007596264312.jpg" alt="-w269"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将布局转换为方形</span></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onMeasure</span><span class="params">(widthMeasureSpec: <span class="type">Int</span>, heightMeasureSpec: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec)</span><br><span class="line">    <span class="keyword">val</span> size = min(measuredWidth,measuredHeight)</span><br><span class="line">    setMeasuredDimension(size,size)</span><br><span class="line">    </span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
+<p>布局修正： 因为自定义布局的要受到父布局的限制，所以需要进行布局修正<br>用resolveSize()或者resolveSizeAndState()修正结果。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onMeasure</span><span class="params">(widthMeasureSpec: <span class="type">Int</span>, heightMeasureSpec: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> size = ((radius+padding) * <span class="number">2</span>).toInt()</span><br><span class="line">    <span class="keyword">val</span> width = View.resolveSize(size,widthMeasureSpec)</span><br><span class="line">    <span class="keyword">val</span> height = View.resolveSize(size,heightMeasureSpec)</span><br><span class="line">    setMeasuredDimension(width,height)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>foreach表示遍历数组或者集合中的每一个元素，其中的i指代具体的元素</p>
-<h4 id="filter（过滤）"><a href="#filter（过滤）" class="headerlink" title="filter（过滤）"></a>filter（过滤）</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [1, 2, 3]</span></span><br><span class="line">      ⬇️</span><br><span class="line"><span class="comment">//  &#123;2, 3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//            👇 注意，这里变成了 List</span></span><br><span class="line"><span class="keyword">val</span> newList: List = intArray.filter &#123; i -&gt;</span><br><span class="line">    i != <span class="number">1</span> <span class="comment">// 👈 过滤掉数组中等于 1 的元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>filter表示对每个元素进行过滤操作，如果lambda表达式中的条件成立则留下元素，否则剔除，最终生成新的集合。</p>
-<h4 id="map-遍历生成新的集合"><a href="#map-遍历生成新的集合" class="headerlink" title="map(遍历生成新的集合)"></a>map(遍历生成新的集合)</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  [1, 2, 3]</span></span><br><span class="line">       ⬇️</span><br><span class="line"><span class="comment">//  &#123;2, 3, 4&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> newList: List = intArray.map &#123; i -&gt;</span><br><span class="line">    i + <span class="number">1</span> <span class="comment">// 👈 每个元素加 1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>map会遍历每个元素，并执行指定表达式，最终形成新的集合。</p>
-<h4 id="flatmap（数组降维打平）"><a href="#flatmap（数组降维打平）" class="headerlink" title="flatmap（数组降维打平）"></a>flatmap（数组降维打平）</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//          [1, 2, 3]</span></span><br><span class="line">               ⬇️</span><br><span class="line"><span class="comment">// &#123;&quot;2&quot;, &quot;a&quot; , &quot;3&quot;, &quot;a&quot;, &quot;4&quot;, &quot;a&quot;&#125;</span></span><br><span class="line"></span><br><span class="line">intArray.flatMap &#123; i -&gt;</span><br><span class="line">    listOf(<span class="string">&quot;<span class="subst">$&#123;i + <span class="number">1</span>&#125;</span>&quot;</span>, <span class="string">&quot;a&quot;</span>) <span class="comment">// 👈 生成新集合</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<ul>
+<li>重写onLayout()和onMeasure()<br>eg:TagLayout </li>
+</ul>
 
     </div>
 
@@ -354,21 +368,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
+              <a href="/tags/Android/" rel="tag"># Android</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/09/01/Android%E5%A4%9A%E6%B8%A0%E9%81%93%E6%89%93%E5%8C%85%E5%8A%A0%E5%9B%BA%E6%96%B9%E6%A1%88/" rel="prev" title="Android多渠道打包加固方案">
-                  <i class="fa fa-chevron-left"></i> Android多渠道打包加固方案
+                <a href="/2020/09/16/Kotlin/Kotlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" rel="prev" title="kotlin学习循环与遍历">
+                  <i class="fa fa-chevron-left"></i> kotlin学习循环与遍历
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/09/02/Android/Android%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E8%84%9A%E6%9C%AC/" rel="next" title="Android自动化打包脚本">
-                  Android自动化打包脚本 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
